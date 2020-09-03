@@ -1,0 +1,12 @@
+tensorflow
+scikit-learn
+pandas
+pymongo
+flask_cors
+opencv-python
+flask
+imutils
+numpy
+keras
+gunicorn
+h5py

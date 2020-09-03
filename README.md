@@ -1,1 +1,1 @@
-project0
+# Demo application

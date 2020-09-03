@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+      - RABBITMQ_DEFAULT_VHOST=/
+    restart: unless-stopped
+    networks:
+      - test-network
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - rabbitmq-data:/data/rabbitmq
+
+  mongodb:
+    image: mongo:3.4
+    environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+    networks:
+      - test-network
+    restart: unless-stopped
+    volumes:
+      - mongodb-data:/data/db
+
+  end_point_to_queue:
+    build:
+      context: ..
+      dockerfile: docker_ml_base_image/Dockerfile
+    depends_on:
+      - rabbitmq
+    ports:
+      - 8090:8090
+    restart: unless-stopped
+    networks:
+      - test-network
+
+
+volumes:
+    rabbitmq-data:
+    mongodb-data:
+    model-data:
+      
+networks:
+  test-network:
+    driver: bridge
+
